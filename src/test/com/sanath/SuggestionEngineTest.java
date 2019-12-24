@@ -16,6 +16,8 @@ public class SuggestionEngineTest {
             {
                 add(new Word("hello_world", 10));
                 add(new Word("hello", 12));
+                add(new Word("hel", 1));
+                add(new Word("iel", 1));
             }
         };
         engine.build(words);

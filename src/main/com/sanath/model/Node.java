@@ -1,20 +1,18 @@
 package com.sanath.model;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Node {
     private static final int MAX_CACHE = 10;
 
     private Letter letter;
-    private List<Node> children;
+    private Map<Character, Node> children;
     private TreeSet<Word> possibleWords;
 
     public Node(Letter letter) {
         this.letter = letter;
         this.possibleWords = new TreeSet<>();
-        this.children = new LinkedList<>();
+        this.children = new HashMap<>();
     }
 
     public void markWordEnd(Word word) {
@@ -25,7 +23,11 @@ public class Node {
 
     @Override
     public String toString() {
-        return letter.getValue() + "";
+        return "Node{" +
+            "letter=" + letter +
+            ", children=" + children +
+            ", possibleWords=" + possibleWords +
+            '}';
     }
 
     public void addPossibleWord(Word word) {
@@ -53,11 +55,11 @@ public class Node {
         this.possibleWords = possibleWords;
     }
 
-    public List<Node> getChildren() {
+    public Map<Character, Node> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Node> children) {
+    public void setChildren(Map<Character, Node> children) {
         this.children = children;
     }
 }

@@ -12,7 +12,13 @@ public class SuggestionEngine implements ISuggestionEngine {
     @Override
     public void build(List<Word> wordList) {
         root = new Node(null);
-        wordList.forEach(word -> insert(word, root, 0));
+        wordList.forEach(word -> {
+            String[] segments = word.getValue().split("_");
+            for (String segment : segments) {
+                insert(segment, word, root, 0);
+            }
+        });
+        System.out.println(root);
     }
 
     @Override
@@ -28,34 +34,31 @@ public class SuggestionEngine implements ISuggestionEngine {
      * @param root,  the current node in the tree
      * @param index, the index of the word that should be inserted
      */
-    private void insert(Word word, Node root, int index) {
-        if (word.getValue().length() == index) return;
+    private void insert(String segment, Word word, Node root, int index) {
+        if (segment.length() == index) return;
 
-        boolean isWordEnd = word.getValue().length() == (index + 1);
-        char currentChar = word.getValue().charAt(index);
+        boolean isWordEnd = segment.length() == (index + 1);
+        char currentChar = segment.charAt(index);
 
-        for (Node node : root.getChildren()) {
-            if (node.getLetter().isWordEnd()) {
+        if (root.getChildren().containsKey(currentChar)) {
+            Node node = root.getChildren().get(currentChar);
                 node.addPossibleWord(word);
-            }
             if (currentChar == node.getLetter().getValue()) {
                 if (isWordEnd) {
                     node.markWordEnd(word);
                 }
-                insert(word, node, ++index);
-                return;
+                insert(segment, word, node, ++index);
             }
+        } else {
+            Letter letter = new Letter(
+                currentChar,
+                isWordEnd ? word.getWeight() : null,
+                isWordEnd);
+            Node currentNode = new Node(letter);
+            currentNode.addPossibleWord(word);
+            root.getChildren().put(currentChar, currentNode);
 
+            insert(segment, word, currentNode, ++index);
         }
-
-        Letter letter = new Letter(
-            currentChar,
-            isWordEnd ? word.getWeight() : null,
-            isWordEnd);
-        Node currentNode = new Node(letter);
-        currentNode.addPossibleWord(word);
-        root.getChildren().add(currentNode);
-
-        insert(word, currentNode, ++index);
     }
 }
