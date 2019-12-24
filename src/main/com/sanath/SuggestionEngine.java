@@ -13,23 +13,18 @@ public class SuggestionEngine implements ISuggestionEngine {
     @Override
     public void build(List<Word> wordList) {
         root = new Node(null);
-        wordList.forEach(word -> {
-            String[] segments = word.getValue().split("_");
-            for (String segment : segments) {
-                insert(segment, word, root, 0);
-            }
-        });
+        wordList.forEach(this::insertWord);
     }
 
     @Override
     public List<Word> search(String query) {
-        Node current = root;
+        Node currNode = root;
         for (int i = 0; i < query.length(); i++) {
-            char c = query.charAt(i);
-            if (current.getChildren().containsKey(c)) {
-                current = current.getChildren().get(c);
+            char currChar = query.charAt(i);
+            if (currNode.hasChild(currChar)) {
+                currNode = currNode.getChild(currChar);
                 if (query.length() == (i + 1)) {
-                    return current.getPossibleWordList();
+                    return currNode.getPossibleWordList();
                 }
             } else {
                 return Collections.emptyList();
@@ -38,6 +33,11 @@ public class SuggestionEngine implements ISuggestionEngine {
         return Collections.emptyList();
     }
 
+    private void insertWord(Word word) {
+        String[] segments = word.getValue().split("_");
+        for (String s : segments)
+            insert(s, word, root, 0);
+    }
 
     /**
      * Recursively traverse and insert character in the tree.
@@ -50,30 +50,25 @@ public class SuggestionEngine implements ISuggestionEngine {
     private void insert(String segment, Word word, Node root, int index) {
         if (segment.length() == index) return;
 
-        boolean isWordEnd = segment.length() == (index + 1);
+        boolean isSegmentEnd = segment.length() == (index + 1);
         char currentChar = segment.charAt(index);
 
         if (root.getChildren().containsKey(currentChar)) {
             Node node = root.getChildren().get(currentChar);
             node.addPossibleWord(word);
             if (currentChar == node.getLetter().getValue()) {
-                if (isWordEnd) node.markWordEnd(word);
+                if (isSegmentEnd) node.markWordEnd(word);
                 insert(segment, word, node, ++index);
             }
         } else {
-            Node currentNode = createNode(word, root, isWordEnd, currentChar);
+            Letter letter = new Letter(
+                currentChar,
+                isSegmentEnd ? word.getWeight() : null,
+                isSegmentEnd);
+            Node currentNode = new Node(letter);
+            currentNode.addPossibleWord(word);
+            root.getChildren().put(currentChar, currentNode);
             insert(segment, word, currentNode, ++index);
         }
-    }
-
-    private Node createNode(Word word, Node root, boolean isWordEnd, char currentChar) {
-        Letter letter = new Letter(
-            currentChar,
-            isWordEnd ? word.getWeight() : null,
-            isWordEnd);
-        Node currentNode = new Node(letter);
-        currentNode.addPossibleWord(word);
-        root.getChildren().put(currentChar, currentNode);
-        return currentNode;
     }
 }

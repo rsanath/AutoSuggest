@@ -25,7 +25,7 @@ public class SuggestionEngineTest {
     }
 
     @Test
-    public void show_search() {
+    public void should_return_correct_results() {
         ISuggestionEngine engine = new SuggestionEngine();
         List<Word> words = new ArrayList<Word>() {
             {
@@ -45,7 +45,7 @@ public class SuggestionEngineTest {
     }
 
     @Test
-    public void show_search_when_no_words_found() {
+    public void should_return_empty_list_when_no_words_found() {
         ISuggestionEngine engine = new SuggestionEngine();
         List<Word> words = new ArrayList<Word>() {
             {
@@ -62,7 +62,7 @@ public class SuggestionEngineTest {
     }
 
     @Test
-    public void show_search_when_search_second_half() {
+    public void should_return_full_word_when_search_second_half() {
         ISuggestionEngine engine = new SuggestionEngine();
         List<Word> words = new ArrayList<Word>() {
             {
@@ -81,4 +81,28 @@ public class SuggestionEngineTest {
         Assert.assertEquals(1, result.size());
     }
 
+    @Test
+    public void should_return_max_10_results() {
+        ISuggestionEngine engine = new SuggestionEngine();
+        List<Word> words = new ArrayList<Word>() {
+            {
+                add(new Word("abjured", 11));
+                add(new Word("abjurer", 12));
+                add(new Word("abjures", 13));
+                add(new Word("abaxial", 14));
+                add(new Word("abaxile", 15));
+                add(new Word("abbotcy", 16));
+                add(new Word("abubble", 17));
+                add(new Word("abduced", 18));
+                add(new Word("abysmal", 19));
+                add(new Word("abdomen", 20));
+                add(new Word("abduces", 12));
+                add(new Word("abducts", 22));
+            }
+        };
+        engine.build(words);
+
+        List<Word> result = engine.search("ab");
+        Assert.assertEquals(10, result.size());
+    }
 }

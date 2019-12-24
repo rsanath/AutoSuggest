@@ -21,6 +21,14 @@ public class Node {
         addPossibleWord(word);
     }
 
+    public boolean hasChild(char c) {
+        return children.containsKey(c);
+    }
+
+    public Node getChild(char c) {
+        return children.get(c);
+    }
+
     @Override
     public String toString() {
         return "Node{" +
