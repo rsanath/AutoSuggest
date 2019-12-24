@@ -39,6 +39,10 @@ public class Node {
         possibleWords.add(word);
     }
 
+    public List<Word> getPossibleWordList() {
+        return new ArrayList<>(possibleWords);
+    }
+
     public Letter getLetter() {
         return letter;
     }

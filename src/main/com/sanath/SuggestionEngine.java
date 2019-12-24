@@ -4,6 +4,7 @@ import com.sanath.model.Letter;
 import com.sanath.model.Node;
 import com.sanath.model.Word;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SuggestionEngine implements ISuggestionEngine {
@@ -18,13 +19,25 @@ public class SuggestionEngine implements ISuggestionEngine {
                 insert(segment, word, root, 0);
             }
         });
-        System.out.println(root);
     }
 
     @Override
     public List<Word> search(String query) {
-        return null;
+        Node current = root;
+        for (int i = 0; i < query.length(); i++) {
+            char c = query.charAt(i);
+            if (current.getChildren().containsKey(c)) {
+                current = current.getChildren().get(c);
+                if (query.length() == (i + 1)) {
+                    return current.getPossibleWordList();
+                }
+            } else {
+                return Collections.emptyList();
+            }
+        }
+        return Collections.emptyList();
     }
+
 
     /**
      * Recursively traverse and insert character in the tree.
@@ -42,23 +55,25 @@ public class SuggestionEngine implements ISuggestionEngine {
 
         if (root.getChildren().containsKey(currentChar)) {
             Node node = root.getChildren().get(currentChar);
-                node.addPossibleWord(word);
+            node.addPossibleWord(word);
             if (currentChar == node.getLetter().getValue()) {
-                if (isWordEnd) {
-                    node.markWordEnd(word);
-                }
+                if (isWordEnd) node.markWordEnd(word);
                 insert(segment, word, node, ++index);
             }
         } else {
-            Letter letter = new Letter(
-                currentChar,
-                isWordEnd ? word.getWeight() : null,
-                isWordEnd);
-            Node currentNode = new Node(letter);
-            currentNode.addPossibleWord(word);
-            root.getChildren().put(currentChar, currentNode);
-
+            Node currentNode = createNode(word, root, isWordEnd, currentChar);
             insert(segment, word, currentNode, ++index);
         }
+    }
+
+    private Node createNode(Word word, Node root, boolean isWordEnd, char currentChar) {
+        Letter letter = new Letter(
+            currentChar,
+            isWordEnd ? word.getWeight() : null,
+            isWordEnd);
+        Node currentNode = new Node(letter);
+        currentNode.addPossibleWord(word);
+        root.getChildren().put(currentChar, currentNode);
+        return currentNode;
     }
 }
