@@ -55,7 +55,8 @@ public class Trie {
 
     private void addPossibleWordToNode(Word word, TrieNode node) {
         TreeSet<Word> possibleWords = node.getPossibleWords();
-        if (possibleWords.size() >= cacheSize) {
+        boolean isCacheFull = possibleWords.size() >= cacheSize;
+        if (isCacheFull) {
             if (word.getWeight() > possibleWords.first().getWeight()) {
                 possibleWords.remove(possibleWords.first());
             }

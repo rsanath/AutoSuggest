@@ -7,6 +7,10 @@ import java.util.List;
 public class SuggestionEngine {
     private Trie trie;
 
+    public List<Word> search(String query) {
+        return trie.search(query);
+    }
+
     public SuggestionEngine(List<Word> words) {
         int cacheLimit = 10;
         String separator = "_";
@@ -24,10 +28,6 @@ public class SuggestionEngine {
     }
 
     private SuggestionEngine() {
-    }
-
-    public List<Word> search(String query) {
-        return trie.search(query);
     }
 
     public String getStateAsJson() {
