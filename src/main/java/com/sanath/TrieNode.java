@@ -1,16 +1,13 @@
-package com.sanath.ds;
-
-import com.sanath.model.Letter;
-import com.sanath.model.Word;
+package com.sanath;
 
 import java.util.*;
 
 public class TrieNode {
-    private Letter letter;
+    private Character letter;
     private Map<Character, TrieNode> children;
     private TreeSet<Word> possibleWords;
 
-    public TrieNode(Letter letter) {
+    public TrieNode(Character letter) {
         this.letter = letter;
         this.children = new HashMap<>();
         this.possibleWords = new TreeSet<>();
@@ -28,11 +25,11 @@ public class TrieNode {
         return new ArrayList<>(possibleWords.descendingSet());
     }
 
-    public Letter getLetter() {
+    public Character getLetter() {
         return letter;
     }
 
-    public void setLetter(Letter letter) {
+    public void setLetter(Character letter) {
         this.letter = letter;
     }
 

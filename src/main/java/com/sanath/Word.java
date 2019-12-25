@@ -1,4 +1,4 @@
-package com.sanath.model;
+package com.sanath;
 
 public class Word implements Comparable<Word> {
     private String value;
@@ -7,6 +7,11 @@ public class Word implements Comparable<Word> {
     public Word(String value, int weight) {
         this.value = value;
         this.weight = weight;
+    }
+
+    @Override
+    public String toString() {
+        return value + " - " + weight;
     }
 
     @Override

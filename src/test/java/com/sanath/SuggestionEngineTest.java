@@ -1,6 +1,5 @@
 package com.sanath;
 
-import com.sanath.model.Word;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,8 +10,6 @@ public class SuggestionEngineTest {
 
     @Test
     public void should_build_suggestion_engine_successfully() {
-        ISuggestionEngine engine = new SuggestionEngine();
-
         List<Word> words = new ArrayList<Word>() {
             {
                 add(new Word("hello_world", 10));
@@ -21,12 +18,11 @@ public class SuggestionEngineTest {
                 add(new Word("iel", 1));
             }
         };
-        engine.build(words);
+        SuggestionEngine engine = new SuggestionEngine(words);
     }
 
     @Test
     public void should_return_correct_results() {
-        ISuggestionEngine engine = new SuggestionEngine();
         List<Word> words = new ArrayList<Word>() {
             {
                 add(new Word("hello_world", 10));
@@ -35,7 +31,7 @@ public class SuggestionEngineTest {
                 add(new Word("iel", 1));
             }
         };
-        engine.build(words);
+        SuggestionEngine engine = new SuggestionEngine(words);
 
         List<Word> result = engine.search("hel");
         Assert.assertEquals(3, result.size());
@@ -46,7 +42,6 @@ public class SuggestionEngineTest {
 
     @Test
     public void should_return_empty_list_when_no_words_found() {
-        ISuggestionEngine engine = new SuggestionEngine();
         List<Word> words = new ArrayList<Word>() {
             {
                 add(new Word("hello_world", 10));
@@ -55,7 +50,7 @@ public class SuggestionEngineTest {
                 add(new Word("iel", 1));
             }
         };
-        engine.build(words);
+        SuggestionEngine engine = new SuggestionEngine(words);
 
         List<Word> result = engine.search("a");
         Assert.assertEquals(0, result.size());
@@ -63,7 +58,6 @@ public class SuggestionEngineTest {
 
     @Test
     public void should_return_full_word_when_search_second_half() {
-        ISuggestionEngine engine = new SuggestionEngine();
         List<Word> words = new ArrayList<Word>() {
             {
                 add(new Word("hello_world", 10));
@@ -72,7 +66,7 @@ public class SuggestionEngineTest {
                 add(new Word("iel", 1));
             }
         };
-        engine.build(words);
+        SuggestionEngine engine = new SuggestionEngine(words);
 
         List<Word> result = engine.search("wor");
         String possibleWord = result.get(0).getValue();
@@ -83,7 +77,6 @@ public class SuggestionEngineTest {
 
     @Test
     public void should_return_max_10_results() {
-        ISuggestionEngine engine = new SuggestionEngine();
         List<Word> words = new ArrayList<Word>() {
             {
                 add(new Word("abjured", 11));
@@ -100,7 +93,7 @@ public class SuggestionEngineTest {
                 add(new Word("abducts", 22));
             }
         };
-        engine.build(words);
+        SuggestionEngine engine = new SuggestionEngine(words);
 
         List<Word> result = engine.search("ab");
         Assert.assertEquals(10, result.size());
