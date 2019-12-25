@@ -96,7 +96,7 @@ public class SuggestionEngineTest {
                 add(new Word("abduced", 18));
                 add(new Word("abysmal", 19));
                 add(new Word("abdomen", 20));
-                add(new Word("abduces", 12));
+                add(new Word("abduces", 21));
                 add(new Word("abducts", 22));
             }
         };
@@ -104,5 +104,11 @@ public class SuggestionEngineTest {
 
         List<Word> result = engine.search("ab");
         Assert.assertEquals(10, result.size());
+
+        Word firstResult = result.get(0);
+        Word lastResult = result.get(result.size() - 1);
+
+        Assert.assertEquals(22, firstResult.getWeight());
+        Assert.assertEquals(13, lastResult.getWeight());
     }
 }

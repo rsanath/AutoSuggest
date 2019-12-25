@@ -1,5 +1,6 @@
 package com.sanath;
 
+import com.sanath.ds.Trie;
 import com.sanath.model.Word;
 
 import java.util.List;
@@ -9,7 +10,11 @@ public class SuggestionEngine implements ISuggestionEngine {
 
     @Override
     public void build(List<Word> wordList) {
-        trie = new Trie(10);
+        int cacheLimit = 10;
+        String separator = "_";
+
+        trie = new Trie(cacheLimit, separator);
+
         wordList.forEach(trie::insert);
     }
 

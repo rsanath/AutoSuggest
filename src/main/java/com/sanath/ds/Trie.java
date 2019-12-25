@@ -1,4 +1,4 @@
-package com.sanath;
+package com.sanath.ds;
 
 import com.sanath.model.Letter;
 import com.sanath.model.Word;
@@ -9,15 +9,19 @@ import java.util.TreeSet;
 
 public class Trie {
     private TrieNode root;
+
     private int cacheSize;
 
-    public Trie(int cacheSize) {
-        root = new TrieNode(null);
+    private String separator;
+
+    public Trie(int cacheSize, String separator) {
+        this.root = new TrieNode(null);
         this.cacheSize = cacheSize;
+        this.separator = separator;
     }
 
     public void insert(Word word) {
-        String[] segments = word.getValue().split("_");
+        String[] segments = word.getValue().split(separator);
         for (String s : segments) {
             insertSegment(s, word);
         }
@@ -41,9 +45,8 @@ public class Trie {
 
     private void insertSegment(String segment, Word word) {
         TrieNode head = root;
-        for (int i = 0; i < segment.toCharArray().length; i++) {
-            char ch = segment.charAt(i);
 
+        for (char ch : segment.toCharArray()) {
             if (head.hasChild(ch)) {
                 head = head.getChild(ch);
             } else {
@@ -57,8 +60,7 @@ public class Trie {
 
     private TrieNode createNode(char c, Word word) {
         Letter letter = new Letter(c, word.getWeight());
-        TrieNode node = new TrieNode(letter);
-        return node;
+        return new TrieNode(letter);
     }
 
     private void addPossibleWordToNode(Word word, TrieNode node) {

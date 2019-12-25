@@ -1,4 +1,4 @@
-package com.sanath;
+package com.sanath.ds;
 
 import com.sanath.model.Letter;
 import com.sanath.model.Word;
@@ -25,7 +25,7 @@ public class TrieNode {
     }
 
     public List<Word> getPossibleWordList() {
-        return new ArrayList<>(possibleWords);
+        return new ArrayList<>(possibleWords.descendingSet());
     }
 
     public Letter getLetter() {
