@@ -10,14 +10,6 @@ public class Word implements Comparable<Word> {
     }
 
     @Override
-    public String toString() {
-        return "Word{" +
-            "value='" + value + '\'' +
-            ", weight=" + weight +
-            '}';
-    }
-
-    @Override
     public int compareTo(Word o) {
         return Integer.compare(this.weight, o.weight);
     }

@@ -3,22 +3,15 @@ package com.sanath.model;
 public class Letter implements Comparable<Letter> {
     private char value;
     private Integer weight;
-    private boolean isWordEnd;
 
 
-    public Letter(char value, Integer weight, boolean isWordEnd) {
+    public Letter(char value, Integer weight) {
         this.value = value;
         this.weight = weight;
-        this.isWordEnd = isWordEnd;
     }
 
-    @Override
-    public String toString() {
-        return "Letter{" +
-            "value=" + value +
-            ", weight=" + weight +
-            ", isWordEnd=" + isWordEnd +
-            '}';
+    public boolean isWordEnd() {
+        return weight != null;
     }
 
     @Override
@@ -40,13 +33,5 @@ public class Letter implements Comparable<Letter> {
 
     public void setWeight(Integer weight) {
         this.weight = weight;
-    }
-
-    public boolean isWordEnd() {
-        return isWordEnd;
-    }
-
-    public void setWordEnd(boolean wordEnd) {
-        isWordEnd = wordEnd;
     }
 }
